@@ -13,19 +13,17 @@ namespace LBFGS {
 
     struct Optimizer {
         Optimizer(func_grad_eval func_grad) : func_grad(func_grad) {}
-        int run(vector &sol); // actual optimization loop
+        int run(vector &sol);
 
-        struct IHessian { // L-BFGS approximates inverse Hessian matrix by storing a limited history of past updates
-            void mult(const vector &g, vector &result) const; // matrix-vector multiplication
+        struct IHessian {
+            void mult(const vector &g, vector &result) const; 
             void add_correction(const vector &s, const vector &y);
 
             const int history_depth;
-            //const bool m1qn3_precond;
 
             history S = {};
             history Y = {};
-            vector diag = {};  // used if m1qn3_precond is set to true
-            double gamma = 1.; // used otherwise
+            double gamma = 1.;
         } invH = { 2 };
 
         const func_grad_eval func_grad;
